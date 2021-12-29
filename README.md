@@ -29,7 +29,7 @@ id                     ip            node
 Ntgn2DcuTjGuXlhKDUD4vA 192.168.56.30 Solarr
 
 ```
-
+Open Kibana to load sample data and interact with the cluster: http://localhost:5601.
 latter command will yield the list of nodes with the master column (m for short). Nodes with m are master-eligible nodes and the one with the * is the current master.
 
 ```
@@ -58,3 +58,11 @@ curl -X GET "192.168.0.1:9200/_cluster/state/master_node?pretty"
   "master_node" : "R8Gn9Km0T92H9D7TXGpX4k"
 }
 ```
+
+
+## Step 4. Open Kibana to load sample data and interact with the cluster
+
+```
+ http://localhost:5601.
+ ```
+ 

@@ -1,0 +1,11 @@
+cluster.name: Elk-cluster
+#node.name: node-1
+network.host: 0.0.0.0
+http.port: 9200
+#node.master: true
+#node.data: true
+#cluster.initial_master_nodes: ["node-1"]
+#path.logs: /var/log/elasticsearch
+
+#xpack.license.self_generated.type: trial
+xpack.security.enabled: true

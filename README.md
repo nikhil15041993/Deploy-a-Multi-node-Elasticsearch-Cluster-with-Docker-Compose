@@ -87,3 +87,45 @@ curl -X GET "192.168.0.1:9200/_cluster/state/master_node?pretty"
  http://localhost:5601.
  ```
  
+## Step 5. Download and install Filebeat on Remote server
+
+Download and install Filebeat
+
+```
+DEB
+====
+
+curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.9.2-amd64.deb
+sudo dpkg -i filebeat-7.9.2-amd64.deb
+
+
+RPM
+====
+curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.9.2-x86_64.rpm
+sudo rpm -vi filebeat-7.9.2-x86_64.rpm
+
+```
+
+## Step 6. Edit the configuration
+
+Modify /etc/filebeat/filebeat.yml to set the connection information:
+
+```
+output.elasticsearch:
+  hosts: ["<es_url>"]
+  username: "elastic"
+  password: "<password>"
+  setup.kibana:
+  host: "<kibana_url>"
+  
+```
+Where <password> is the password of the elastic user, <es_url> is the URL of Elasticsearch, and <kibana_url> is the URL of Kibana.
+
+  
+## Step 7. Enable and configure the system module
+
+
+sudo filebeat modules enable system
+Modify the settings in the /etc/filebeat/modules.d/system.yml file.  
+
+

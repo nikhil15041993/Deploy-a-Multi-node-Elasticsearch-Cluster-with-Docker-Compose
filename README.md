@@ -119,13 +119,22 @@ output.elasticsearch:
   host: "<kibana_url>"
   
 ```
-Where <password> is the password of the elastic user, <es_url> is the URL of Elasticsearch, and <kibana_url> is the URL of Kibana.
+Where <password> is the password of the elastic user, <es_url> is the URL of Elasticsearch, and <kibana_url> is the URL of Kibana
 
   
 ## Step 7. Enable and configure the system module
 
-
+```
 sudo filebeat modules enable system
+```  
 Modify the settings in the /etc/filebeat/modules.d/system.yml file.  
 
+## Step 8.Start Filebeat
 
+The setup command loads the Kibana dashboards. If the dashboards are already set up, omit this command.
+
+```
+sudo filebeat setup
+sudo service filebeat start
+```  
+  

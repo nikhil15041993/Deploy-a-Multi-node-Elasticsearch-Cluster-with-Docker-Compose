@@ -10,7 +10,7 @@ Make sure Docker Engine is allotted at least 4GiB of memory.
 docker-compose up
 
 ```
-he following requirements and recommendations apply when running Elasticsearch in Docker in production.
+:warning: following requirements and recommendations apply when running Elasticsearch in Docker in production.
 
 Set vm.max_map_count to at least 262144edit
 The vm.max_map_count kernel setting must be set to at least 262144 for production use.

@@ -1,0 +1,84 @@
+version: "2.8"
+services:
+  elasticsearch:
+    container_name: elasticsearch
+    image: "docker.elastic.co/elasticsearch/elasticsearch:7.9.2"
+    environment:
+      - cluster.name=es-cluster
+      - node.name=es-node-1
+      - path.data=/usr/share/elasticsearch/data
+      - http.port=9200
+      - http.host=0.0.0.0
+      - transport.host=127.0.0.1
+      - bootstrap.memory_lock=true
+      - xpack.security.enabled=true
+      - ELASTIC_PASSWORD=password
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+
+
+    volumes:
+      # ES data dir mount to local drive
+      - share:/usr/share/elasticsearch/data
+    ports:
+      - '9200:9200'
+    networks:
+      - 'elk_stack'    
+
+
+  kibana:
+    container_name: kibana
+    image: "docker.elastic.co/kibana/kibana:7.9.2"
+    environment:
+      - ELASTICSEARCH_PASSWORD=password
+      - ELASTICSEARCH_USERNAME=elastic
+      - server.port=127.0.0.1:5601
+      - elasticsearch.url="http://elasticsearch:9200"
+      - server.name="kibana"   
+    ports:
+      - '5601:5601'
+    networks:
+      - 'elk_stack'
+    depends_on:
+      - 'elasticsearch'
+
+
+  configure_stack:
+    container_name: configure_stack
+    image: docker.elastic.co/beats/metricbeat:7.9.2
+    environment:
+      - ELASTIC_VERSION=7.9.2
+      - ES_PASSWORD=password
+      - ES_DEFAULT_INDEX_PATTERN=DEFAULT_INDEX_PATTERN
+
+    volumes:
+      - './init/configure-stack.sh:/usr/local/bin/configure-stack.sh:ro'     
+    networks:
+      - 'elk_stack'
+    # Wait for ES, Kibana to come up before stack config
+    depends_on:
+      - 'elasticsearch'
+      - 'kibana'                
+
+
+  filebeat:
+    image: "docker.elastic.co/beats/filebeat:7.9.2"
+    user: root
+    volumes:
+            - /home/ubuntu/filebeats.yml:/usr/share/filebeat/filebeat.yml:ro
+            - /var/lib/docker:/var/lib/docker:ro
+            - /var/run/docker.sock:/var/run/docker.sock  
+
+        
+volumes:
+  share:
+    external: true
+
+
+networks:
+  elk_stack:
+      driver: bridge      
